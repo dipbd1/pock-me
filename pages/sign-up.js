@@ -1,7 +1,7 @@
 import styles from '../styles/pages/SignUp.module.css';
 
 import Head from 'next/head';
-import SignUp from '../components/SignUp';
+import SignUp from '../components/common/SignUp';
 
 const SignUpPage = () => {
   return (

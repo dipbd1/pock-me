@@ -1,7 +1,7 @@
-import styles from '../styles/components/Layout.module.css';
+import styles from '../../styles/components/Layout.module.css';
 
 import React, { Fragment } from 'react';
-import { useUserContext } from '../UserProvider';
+import { useUserContext } from '../../hooks/userHooks/UserProvider';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Menu, Transition } from '@headlessui/react';
@@ -13,8 +13,11 @@ import {
 } from '@heroicons/react/outline';
 import Avatar from './Avatar';
 
+import { useSignOut } from '@nhost/nextjs'
+
 const Layout = ({ children = null }) => {
   const { user } = useUserContext();
+  const { signOut } = useSignOut()
 
   const menuItems = [
     {
@@ -29,9 +32,10 @@ const Layout = ({ children = null }) => {
     },
     {
       label: 'Logout',
-      onClick: () => null,
+      onClick: () => signOut(),
       icon: LogoutIcon,
     },
+
   ];
 
   return (
@@ -39,7 +43,7 @@ const Layout = ({ children = null }) => {
       <header className={styles.header}>
         <div className={styles['header-container']}>
           <div className={styles['logo-wrapper']}>
-            <Link href="/">
+            <Link href="/" passHref>
               <a>
                 <Image
                   src="/logo.svg"
@@ -79,7 +83,7 @@ const Layout = ({ children = null }) => {
                     <div key={label} className={styles['menu-item']}>
                       <Menu.Item>
                         {href ? (
-                          <Link href={href}>
+                          <Link href={href} passHref>
                             <a>
                               <Icon />
                               <span>{label}</span>
@@ -101,8 +105,8 @@ const Layout = ({ children = null }) => {
         </div>
       </header>
 
-      <main className={styles.main}>
-        <div className={styles['main-container']}>{children}</div>
+      <main className='container mx-auto px-36 pt-20 bg-white'>
+        <div>{children}</div>
       </main>
     </div>
   );

@@ -1,4 +1,4 @@
-import styles from '../styles/components/Input.module.css';
+import styles from '../../styles/components/Input.module.css';
 
 const Input = ({ type = 'text', label = '', ...props }) => {
   return (
