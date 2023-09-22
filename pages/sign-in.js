@@ -1,7 +1,7 @@
 import styles from '../styles/pages/SignIn.module.css';
 
 import Head from 'next/head';
-import SignIn from '../components/SignIn';
+import SignIn from '../components/common/SignIn';
 
 const SignInPage = () => {
   return (

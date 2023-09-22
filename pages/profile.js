@@ -1,10 +1,15 @@
 import styles from '../styles/pages/Profile.module.css';
 
 import { useState } from 'react';
-import { useUserContext } from '../UserProvider';
+import { useUserContext } from '../hooks/userHooks/UserProvider';
 import Head from 'next/head';
-import Layout from '../components/Layout';
-import Input from '../components/Input';
+import Layout from '../components/common/Layout';
+import Input from '../components/common/Input';
+import withAuth from '../components/hoc/withAuth';
+
+import { useMutation } from '@apollo/client';
+import { UPDATE_USER_MUTATION } from '../queries/profile/user';
+import { toast } from 'react-hot-toast'
 
 const Profile = () => {
   const { user } = useUserContext();
@@ -16,8 +21,25 @@ const Profile = () => {
   const isLastNameDirty = lastName !== user?.metadata?.lastName;
   const isProfileFormDirty = isFirstNameDirty || isLastNameDirty;
 
+  const [mutateUser, { loading: updatingProfile }] = useMutation(UPDATE_USER_MUTATION)
+
   const updateUserProfile = async e => {
     e.preventDefault();
+    try {
+      await mutateUser({
+        variables: {
+          id: user.id,
+          displayName: `${firstName} ${lastName}`.trim(),
+          metadata: {
+            firstName,
+            lastName
+          }
+        }
+      })
+      toast.success('Updated successfully', { id: 'updateProfile' })
+    } catch (error) {
+      toast.error('Unable to update profile', { id: 'updateProfile' })
+    }
   };
 
   return (
@@ -77,4 +99,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default withAuth(Profile);
